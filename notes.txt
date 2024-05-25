@@ -1,0 +1,155 @@
+Nats
+    https://nats.io/
+
+Nats JS(jetstream)
+    https://docs.nats.io/nats-concepts/jetstream
+    https://docs.nats.io/using-nats/developer/develop_jetstream
+    https://docs.nats.io/nats-concepts/core-nats/queue#stream-as-a-queue
+
+JetStream wire API Reference
+    https://docs.nats.io/reference/reference-protocols/nats_api_reference
+
+Shemas
+    https://github.com/nats-io/jsm.go/tree/main/schema_source/jetstream/api/v1
+
+JetStream Model Deep Dive
+    https://docs.nats.io/using-nats/developer/develop_jetstream/model_deep_dive
+
+Pedantic mode
+    https://docs.nats.io/using-nats/developer/connecting/misc#turn-on-pedantic-mode
+
+Go JetStream Simplified Client
+    https://github.com/nats-io/nats.go/tree/main/jetstream#jetstream-simplified-client
+
+Nats JS client for php
+    https://github.com/basis-company/nats.php
+
+    Description of usage
+        https://github.com/basis-company/nats.php/issues/59#issuecomment-1907919039
+
+Ephemeral Consumer life cycle
+    https://natsio.slack.com/archives/CM3T6T7JQ/p1711275996676309
+    https://natsio.slack.com/archives/CM3T6T7JQ/p1711278584957209?thread_ts=1711275996.676309&cid=CM3T6T7JQ
+
+Nats articles
+    https://www.byronruth.com/tag/series/
+
+NATS and Docker
+    https://docs.nats.io/running-a-nats-service/nats_docker
+
+RoadRunner Jobs
+    https://docs.roadrunner.dev/queues-and-jobs/overview-queues
+
+    Nats Jobs
+        https://docs.roadrunner.dev/queues-and-jobs/nats
+        https://github.com/roadrunner-server/nats/tree/master/natsjobs
+
+    Beanstalk Jobs
+        https://docs.roadrunner.dev/queues-and-jobs/beanstalk
+
+Allowed number of consumers for JS as Queue (WorkQueuePolicy)
+    https://natsio.slack.com/archives/CM3T6T7JQ/p1712153925255479
+
+Multiple clients/workers as one consumer
+    https://natsio.slack.com/archives/CM3T6T7JQ/p1714853594923729?thread_ts=1714853415.006099&cid=CM3T6T7JQ
+
+Synadia examples
+    https://github.com/synadia-io/rethink_connectivity
+
+Implementing NATS JetStream as Queues
+    https://dzone.com/articles/implementing-nats-jetstream-as-queues-in-golang-a
+
+Choria Asynchronous Job Processor
+    https://github.com/choria-io/asyncjobs
+
+NATS blog
+    https://nats.io/blog/
+
+JetStream Java tutorial
+    https://nats.io/blog/hello-world-java-client/
+
+    JetStream stream creation in Java
+        https://nats.io/blog/jetstream-java-client-01-stream-create/
+
+    JetStream publishing in Java
+        https://nats.io/blog/jetstream-java-client-02-publish/
+
+    Consumers in Java
+        https://nats.io/blog/jetstream-java-client-03-consume/
+
+    Push consumers in Java
+        https://nats.io/blog/jetstream-java-client-04-push-subscribe/#jetstream-push-consumers-with-the-natsio-java-library
+
+    Pull consumers in Java
+        https://nats.io/blog/jetstream-java-client-05-pull-subscribe/#jetstream-pull-consumers-with-the-natsio-java-library
+
+[Questions]Regarding Adapter implementation
+    https://github.com/yiisoft/queue-redis/issues/4
+
+PHP UUID generator (for usage as MESSAGE_ID_KEY)
+    https://github.com/ramsey/uuid
+
+Tracking of job state in Work-queue stream
+    https://natsio.slack.com/archives/CM3T6T7JQ/p1715060131243269
+
+    Question:
+        Tracking of job state in Work-queue stream
+        ----------------------------------------------------
+        Proposed flow:
+            Jobs are submitted to JS work-queue stream
+            Received sequence number is used further as unique JOB ID
+
+        Job has following states:
+            Submitted
+            In-process
+            Finished
+            Failed
+
+        Submitter calls GetJobState(JOB ID) in order to get job state
+
+        Worker calls SetJobState(JOB ID, job state) in order to update job state
+        This is typical flow in background job processing.
+
+        What is the NATS way/pattern to implement it?
+
+    Answer:
+        I’m using a JetStream configured as a workflow for sending job updates
+        and a K/V store for saving the state of the jobs in JSON format.
+        I Ack() the job after updating the K/V. That is hopefully good enough.
+
+
+Nats lock
+    https://pkg.go.dev/github.com/metal-toolbox/addonx/natslock
+
+JetStream Global Lock
+    https://natsio.slack.com/archives/CM3T6T7JQ/p1715835870966629
+
+    Question:
+        For background processing we use:
+        Stream with WorkQueuePolicy - queue for workers
+        KV bucket for saving of job states (submitted/inprocess/finished/failed)
+
+        Is there possibility to lock JetStream in order to achieve atomic working with 2 storages?
+
+        Another example when atomic is required - initiation of streams/buckets.
+        We can not do it via cli, so first process (submitter or worker) should create/purge/etc
+        by itself
+
+    Answers:
+        ... the solution is simple, optimistic locking with deduplication:
+        Read from stream (but no ack)
+        CAS (compare and swap) Store to KV (only update if a unique transaction key is not already set)
+        If update successful - ack in stream
+        If update failed (the transaction key is already in KV) its a duplicate. You log a warning and ack the message anyway
+
+        ...You dont generally need a global lock for this kind of thing since jetstream
+        ensures only 1 client gets a message within the ack waiting time.
+        So optimistic concurrency control is often enough when you consider that
+        if you use acks correctly and request more time to process a message if you are
+        not done with it in time you can even handle long running jobs this way
+
+Run GitActions locally
+    https://nektosact.com/
+
+    Repo for testing
+        https://github.com/cplee/github-actions-demo

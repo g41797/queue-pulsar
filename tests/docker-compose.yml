@@ -1,0 +1,19 @@
+version: '3'
+services:
+  php-cli:
+    working_dir: /app
+    build:
+      context: ..
+      dockerfile: ./tests/docker/php/cli/Dockerfile
+    restart: on-failure
+    volumes:
+      - ./runtime:/app/tests/runtime
+    depends_on:
+      - nats
+  nats:
+      image: nats:latest
+      restart: unless-stopped
+      ports:
+        - "4222:4222"
+        - "8222:8222"
+      command: -js -m 8222
