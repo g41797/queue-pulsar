@@ -1,7 +1,7 @@
 # Yii3 Queue Adapter for Apache Pulsar
 
 
-[![tests](https://github.com/g41797/queue-nats/actions/workflows/tests.yml/badge.svg)](https://github.com/g41797/queue-nats/actions/workflows/tests.yml)
+[![tests](https://github.com/g41797/queue-pulsar/actions/workflows/tests.yml/badge.svg)](https://github.com/g41797/queue-pulsar/actions/workflows/tests.yml)
 
 ## Description
 
@@ -25,6 +25,18 @@ composer require g41797/queue-pulsar
 
 - As part of [Yii3 Queue Framework](https://github.com/yiisoft/queue/blob/master/docs/guide/en/README.md)
 - Stand-alone
+
+## Limitations
+
+[Job Status](https://github.com/yiisoft/queue/blob/master/docs/guide/en/usage.md#job-status)
+```php
+// Push a job into the queue and get a message ID.
+$id = $queue->push(new SomeJob());
+
+// Get job status.
+$status = $queue->status($id);
+```
+is not supported.
 
 ## License
 
