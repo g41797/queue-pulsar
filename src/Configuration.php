@@ -8,7 +8,7 @@ final class Configuration
 {
     public function __construct(
         public string   $host = 'localhost',
-        public int      $port = 4222
+        public int      $port = 6650
     ) {
         return;
     }

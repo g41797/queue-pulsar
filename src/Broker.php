@@ -157,17 +157,9 @@ class Broker implements BrokerInterface
 
     public function done(string $id): bool
     {
-        if (empty($id))
-        {
-            return false;
-        }
-
-        if (!$this->isReady()) {
-            return false;
-        }
-
-        $this->statuses->put($id, $this->statusString[JobStatus::DONE]);
-        return true;
+        // For automatic ACK after consuming.
+        // TODO: For non-automatic - ad real ACK
+        return !empty($id);
     }
 
     public ?Stream $submitted = null;

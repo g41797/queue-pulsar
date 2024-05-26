@@ -13,6 +13,8 @@ use Yiisoft\Queue\Enum\JobStatus;
 use Yiisoft\Queue\Message\MessageInterface;
 use Yiisoft\Queue\QueueFactoryInterface;
 
+use G41797\Queue\Pulsar\Exception\NotSupportedStatusMethodException;
+
 class Adapter implements AdapterInterface
 {
     private BrokerFactoryInterface $brokerFactory;
@@ -44,15 +46,7 @@ class Adapter implements AdapterInterface
 
     public function status(int|string $id): JobStatus
     {
-
-        $jobStatus = $this->broker->jobStatus($id);
-
-        if ($jobStatus == null)
-        {
-            throw new \InvalidArgumentException('job does not exist');
-        }
-
-        return $jobStatus;
+        throw new NotSupportedStatusMethodException();
     }
 
     public function runExisting(callable $handlerCallback): void
@@ -88,13 +82,14 @@ class Adapter implements AdapterInterface
             return $this;
         }
 
-        return new self(
-                            $this->brokerFactory,
-                            $this->channelName,
-                            $this->brokerConfiguration,
-                            $this->logger,
-                            $this->loop
-                        );
+        return new self
+        (
+            channelName:            $this->channelName,
+            brokerConfiguration:    $this->brokerConfiguration,
+            logger:                 $this->logger,
+            loop:                   $this->loop,
+            timeout:                $this->timeout
+        );
     }
 
     private ?BrokerInterface $broker = null;

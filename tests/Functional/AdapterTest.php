@@ -16,7 +16,7 @@ use Yiisoft\Queue\Message\Message;
 use Yiisoft\Queue\Message\MessageInterface;
 
 
-class BrokerAdapterTest extends FunctionalTestCase
+class AdapterTest extends FunctionalTestCase
 {
 
     private ?BrokerFactoryInterface $brokerFactory = null;
@@ -118,11 +118,6 @@ class BrokerAdapterTest extends FunctionalTestCase
             $ids[] = $id;
         }
 
-        foreach ($ids as $id) {
-            $status = $submitter->status($id);
-            $this->assertTrue($status->isWaiting());
-        }
-
         return $ids;
     }
 
@@ -134,11 +129,6 @@ class BrokerAdapterTest extends FunctionalTestCase
         $worker->subscribe($this->getCallback());
 
         $this->assertEquals($this->getHandler()->processed(), count($ids));
-
-        foreach ($ids as $id) {
-            $status = $worker->status($id);
-            $this->assertTrue($status->isDone());
-        }
 
         return;
     }
