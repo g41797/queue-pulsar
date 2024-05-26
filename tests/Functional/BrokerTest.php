@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace G41797\Queue\Nats\Functional;
+namespace G41797\Queue\Pulsar\Functional;
 
 use Ramsey\Uuid\Uuid;
 use Yiisoft\Queue\Enum\JobStatus;
 use Yiisoft\Queue\Message\Message;
-use G41797\Queue\Nats\Broker;
+use G41797\Queue\Pulsar\Broker;
 
 class BrokerTest extends FunctionalTestCase
 {

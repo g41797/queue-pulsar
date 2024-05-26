@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace G41797\Queue\Nats\Functional;
+namespace G41797\Queue\Pulsar\Functional;
 
 use Basis\Nats\Client;
 use PHPUnit\Framework\TestCase;

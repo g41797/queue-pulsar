@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace G41797\Queue\Nats;
+namespace G41797\Queue\Pulsar;
 
 use Psr\Log\LoggerInterface;
-use G41797\Queue\Nats\Configuration as BrokerConfiguration;
+use G41797\Queue\Pulsar\Configuration as BrokerConfiguration;
 use Yiisoft\Queue\QueueFactoryInterface;
 
 class BrokerFactory implements BrokerFactoryInterface

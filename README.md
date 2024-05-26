@@ -1,15 +1,13 @@
-# Yii3 Queue NATS Adapter
+# Yii3 Queue Adapter for Apache Pulsar
 
 
 [![tests](https://github.com/g41797/queue-nats/actions/workflows/tests.yml/badge.svg)](https://github.com/g41797/queue-nats/actions/workflows/tests.yml)
 
 ## Description
 
-Yii3 Queue [**NATS**](https://nats.io/) Adapter is new adapter in [Yii3 Queue Adapters family.](https://github.com/yiisoft/queue/blob/master/docs/guide/en/adapter-list.md)
+Yii3 Queue Adapter for [**Apache Pulsar**](https://pulsar.apache.org/) is new adapter in [Yii3 Queue Adapters family.](https://github.com/yiisoft/queue/blob/master/docs/guide/en/adapter-list.md)
 
-It uses [JetStream](https://docs.nats.io/nats-concepts/jetstream) subsystem of NATS.
-
-Implementation of adapter based on [basis company](https://github.com/basis-company/nats.php) library.
+Implementation of adapter based on [pulsar-client-php](https://github.com/ikilobyte/pulsar-client-php) library.
 
 ## Requirements
 
@@ -20,7 +18,7 @@ Implementation of adapter based on [basis company](https://github.com/basis-comp
 The package could be installed with composer:
 
 ```shell
-composer require g41797/queue-nats
+composer require g41797/queue-pulsar
 ```
 
 ## General usage
@@ -30,5 +28,5 @@ composer require g41797/queue-nats
 
 ## License
 
-The Yii3 Queue NATS Adapter is free software. It is released under the terms of the BSD License.
+Yii3 Queue Adapter for Apache Pulsar is free software. It is released under the terms of the BSD License.
 Please see [`LICENSE`](./LICENSE.md) for more information.

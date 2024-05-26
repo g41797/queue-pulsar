@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace G41797\Queue\Nats\Functional;
+namespace G41797\Queue\Pulsar\Functional;
 
-use G41797\Queue\Nats\Adapter;
-use G41797\Queue\Nats\BrokerFactory;
-use G41797\Queue\Nats\BrokerFactoryInterface;
-use G41797\Queue\Nats\CheckMessageHandler;
-use G41797\Queue\Nats\NullLoop;
+use G41797\Queue\Pulsar\Adapter;
+use G41797\Queue\Pulsar\BrokerFactory;
+use G41797\Queue\Pulsar\BrokerFactoryInterface;
+use G41797\Queue\Pulsar\CheckMessageHandler;
+use G41797\Queue\Pulsar\NullLoop;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Yiisoft\Queue\Adapter\AdapterInterface;

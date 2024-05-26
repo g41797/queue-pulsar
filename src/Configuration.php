@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace G41797\Queue\Nats;
+namespace G41797\Queue\Pulsar;
 
 final class Configuration
 {

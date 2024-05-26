@@ -19,4 +19,7 @@ jobs:
       - uses: php-actions/composer@v6
       - run: docker compose up -d
         working-directory: docker
+      - run: |
+            echo "-- Wait for Pulsar service to be ready"
+            until curl http://localhost:8080/metrics > /dev/null 2>&1 ; do sleep 1; done
       - run: vendor/bin/phpunit --testsuite Tests
