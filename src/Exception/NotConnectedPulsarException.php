@@ -6,7 +6,7 @@ namespace G41797\Queue\Pulsar\Exception;
 
 use Yiisoft\FriendlyException\FriendlyExceptionInterface;
 
-class NotConnectedNatsException extends \RuntimeException implements FriendlyExceptionInterface
+class NotConnectedPulsarException extends \RuntimeException implements FriendlyExceptionInterface
 {
     public function getName(): string
     {
