@@ -28,6 +28,11 @@ final class Configuration
         return $this;
     }
 
+    public function url(): string
+    {
+        return 'pulsar://' . $this->host . ':' . $this->port;
+    }
+
     static public function default(): self {
         return new self();
     }

@@ -24,6 +24,6 @@ abstract class FunctionalTestCase extends TestCase
     }
     public function clean(): void
     {
-        $this->assertTrue((new Cleaner())->clean());
+        $this->assertGreaterThanOrEqual(0, (new Cleaner())->clean());
     }
 }

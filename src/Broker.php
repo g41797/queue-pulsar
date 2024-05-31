@@ -42,6 +42,8 @@ class Broker implements BrokerInterface
 
     public const CONSUMER_NAME = 'worker';
 
+    public const SUBMITTER_NAME = 'submitter';
+
     public string $streamName;
     private string $subject;
     private string $prefix;

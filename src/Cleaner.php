@@ -20,18 +20,23 @@ class Cleaner
     ) {
     }
 
-    public function clean(): bool
+    public function clean(): int
     {
+        $cleaned = -1;
+
         if (!$this->isConnected())
         {
-            return false;
+            return $cleaned;
         }
+
+        $cleaned = 0;
 
         while (true) {
 
             try {
                 $message = $this->consumer->receive(false);
                 $this->consumer->ack($message);
+                $cleaned += 1;
             }
             catch (MessageNotFound $e) {
                     break;
@@ -41,7 +46,7 @@ class Cleaner
         $this->consumer->close();
         $this->consumer = null;
 
-        return true;
+        return $cleaned;
     }
 
     public function isConnected(): bool
