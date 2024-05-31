@@ -1,9 +1,66 @@
+Pulsar
+    https://pulsar.apache.org/
 
+Pulsar as a message queue
+    https://pulsar.apache.org/docs/next/cookbooks-message-queue/
+
+PHP client
+    https://github.com/ikilobyte/pulsar-client-php
+
+Go client
+    https://github.com/apache/pulsar-client-go
+
+Pulsar vs Kafka
+    https://dzone.com/articles/a-deep-dive-into-the-differences-between-kafka-and
+    https://www.linkedin.com/pulse/key-differences-kafka-vs-pulsar-ashwani-kumar-oqvif
+    https://www.jesse-anderson.com/2021/09/keeping-things-stupidly-simple-with-pulsar-and-kafka/
+    https://www.geeksforgeeks.org/apache-kafka-vs-apache-pulsar/
+    https://kunalkkg.medium.com/the-battle-of-message-queues-apache-kafka-vs-apache-pulsar-102a6100b023
+
+How Apache Pulsar Works
+    https://jack-vanlightly.com/blog/2018/10/2/understanding-how-apache-pulsar-works
+
+Unified Queueing
+    https://thenewstack.io/apache-pulsar-a-unified-queueing-and-streaming-platform/
+
+Work queue
+    https://medium.com/skills-matter/creating-work-queues-with-apache-kafka-and-apache-pulsar-9f1864516e41
+
+Task Queues
+    https://taskqueues.com/
+
+Functiona workers
+    https://pulsar.apache.org/docs/3.2.x/functions-package-go/
+
+Go Functions
+    https://pulsar.apache.org/docs/3.2.x/functions-package-go/
+
+Docker-compose
+    https://github.com/apache/pulsar/tree/master/docker-compose/kitchen-sink
+
+CLI tools
+    https://apache-pulsar.slack.com/archives/C5Z4T36F7/p1716626334232199
+
+Questions tagged [apache-pulsar]
+    https://stackoverflow.com/tags/apache-pulsar
+
+Pulsar Clients
+    https://pulsar.apache.org/docs/3.2.x/concepts-clients/
 
 Start Pulsar
     cd ./docker
+
+    TODO how to stop/remove already running pulsar
+
     bash ./start.sh
 
 Check main Pulsar port
     sudo netstat --tcp --listening --programs --numeric | grep 6650
+
+Zero value of ReceiverQueueSize
+    https://github.com/ikilobyte/pulsar-client-php/issues/26
+    https://github.com/apache/pulsar-client-go/issues/1223
+    https://github.com/apache/pulsar-client-go/pull/1225
+
+
 

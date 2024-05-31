@@ -20,6 +20,7 @@ use Basis\Nats\Stream\StorageBackend;
 use Basis\Nats\Stream\Stream;
 use Basis\Nats\KeyValue\Bucket;
 
+use G41797\Queue\Pulsar\Exception\NotSupportedStatusMethodException;
 use Ramsey\Uuid\Uuid;
 
 use Psr\Log\LoggerInterface;
@@ -37,6 +38,10 @@ use G41797\Queue\Pulsar\Configuration as BrokerConfiguration;
 
 class Broker implements BrokerInterface
 {
+    public const SUBSCRIPTION_NAME = 'jobs';
+
+    public const CONSUMER_NAME = 'worker';
+
     public string $streamName;
     private string $subject;
     private string $prefix;
@@ -53,7 +58,7 @@ class Broker implements BrokerInterface
     public JsonMessageSerializer $serializer;
 
     public function __construct(
-        private string                  $channelName = QueueFactoryInterface::DEFAULT_CHANNEL_NAME,
+        private string                  $channelName = Adapter::DEFAULT_CHANNEL_NAME,
         private ?BrokerConfiguration    $configuration = null,
         private ?LoggerInterface        $logger = null
     ) {
@@ -65,7 +70,7 @@ class Broker implements BrokerInterface
         }
 
         if (empty($this->channelName)) {
-            $this->channelName = QueueFactoryInterface::DEFAULT_CHANNEL_NAME;
+            $this->channelName = Adapter::DEFAULT_CHANNEL_NAME;
         }
 
         $this->streamName = strtoupper($this->channelName) . "JOBS";
@@ -103,20 +108,7 @@ class Broker implements BrokerInterface
 
     public function jobStatus(string $id): ?JobStatus
     {
-        if (empty($id))
-        {
-            return null;
-        }
-
-        if (!$this->isReady()) {
-            return null;
-        }
-
-        try {
-            return self::stringToJobStatus($this->statuses->get($id));
-        } catch (\Exception) {
-            return null;
-        }
+        throw new NotSupportedStatusMethodException();
     }
 
     public function pull(float $timeout): ?IdEnvelope
@@ -378,4 +370,8 @@ class Broker implements BrokerInterface
         };
     }
 
+    static public function channelToTopic(string $channel): string
+    {
+       return 'persistent://'.$channel;
+    }
 }

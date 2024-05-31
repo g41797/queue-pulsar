@@ -17,10 +17,12 @@ use G41797\Queue\Pulsar\Exception\NotSupportedStatusMethodException;
 
 class Adapter implements AdapterInterface
 {
+    public const DEFAULT_CHANNEL_NAME = 'public/default/yii-queue';
+
     private BrokerFactoryInterface $brokerFactory;
 
     public function __construct(
-        private string              $channelName = QueueFactoryInterface::DEFAULT_CHANNEL_NAME,
+        private string              $channelName = self::DEFAULT_CHANNEL_NAME,
         private array               $brokerConfiguration = [],
         private ?LoggerInterface    $logger = null,
         private ?LoopInterface      $loop = null,

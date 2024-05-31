@@ -10,7 +10,7 @@ use Yiisoft\Queue\QueueFactoryInterface;
 interface BrokerFactoryInterface
 {
     public function get(
-            string $channel = QueueFactoryInterface::DEFAULT_CHANNEL_NAME,
+            string $channel = Adapter::DEFAULT_CHANNEL_NAME,
             array $config = [],
             ?LoggerInterface $logger = null
         ): ?BrokerInterface;

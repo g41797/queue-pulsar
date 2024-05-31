@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 use Yiisoft\Queue\Adapter\AdapterInterface;
 use G41797\Queue\Pulsar\Adapter;
-use G41797\Queue\Pulsar\BrokerFactoryInterface;
-use G41797\Queue\Pulsar\BrokerFactory;
 
 // TODO: how to proceed
 // https://github.com/yiisoft/queue/blob/master/config/di.php
