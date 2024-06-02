@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace G41797\Queue\Pulsar\Functional;
 
-use G41797\Queue\Pulsar\Cleaner;
+use G41797\Queue\Pulsar\Receiver;
 use PHPUnit\Framework\TestCase;
 
 
@@ -24,6 +24,6 @@ abstract class FunctionalTestCase extends TestCase
     }
     public function clean(): void
     {
-        $this->assertGreaterThanOrEqual(0, (new Cleaner())->clean());
+        $this->assertGreaterThanOrEqual(0, (new Receiver(receiveQueueSize: 10000))->clean());
     }
 }

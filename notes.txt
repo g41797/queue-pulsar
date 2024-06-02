@@ -41,6 +41,10 @@ Docker-compose
 CLI tools
     https://apache-pulsar.slack.com/archives/C5Z4T36F7/p1716626334232199
 
+Pulsar Shell
+    https://pulsar.apache.org/docs/3.2.x/administration-pulsar-shell/
+    https://pulsar.apache.org/download/#shell
+
 Questions tagged [apache-pulsar]
     https://stackoverflow.com/tags/apache-pulsar
 

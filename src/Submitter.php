@@ -55,7 +55,7 @@ class Submitter
         try {
 
             $options = new ProducerOptions();
-            $options->setProducerName(Broker::SUBMITTER_NAME);
+            $options->setProducerName(Uuid::uuid7()->toString());
             $options->setConnectTimeout(3);
             $options->setInitialSubscriptionName(Broker::SUBSCRIPTION_NAME);
             $options->setTopic($this->topic);

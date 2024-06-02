@@ -6,7 +6,7 @@ namespace G41797\Queue\Pulsar\Functional;
 
 use G41797\Queue\Pulsar\Adapter;
 use G41797\Queue\Pulsar\Broker;
-use G41797\Queue\Pulsar\Cleaner;
+use G41797\Queue\Pulsar\Receiver;
 use G41797\Queue\Pulsar\Submitter;
 
 class SubmitterTest extends FunctionalTestCase
@@ -19,21 +19,23 @@ class SubmitterTest extends FunctionalTestCase
 
     public function testSubmit(): void
     {
-        $this->assertEquals(10, $this->submitJobs(10));
-        $this->assertEquals(10, (new Cleaner())->clean());
+        $count = 10;
+        $this->assertEquals($count, count($this->submitJobs($count)));
+        $this->assertEquals($count, (new Receiver(receiveQueueSize: 1000))->clean());
     }
 
-    private function submitJobs(int $count): int
+    private function submitJobs(int $count): array
     {
-        $submitted = 0;
-        $submitter = Submitter::default();
+        $submitted = [];
+
         for ($i = 0; $i < $count; $i++) {
+            $submitter = Submitter::default();
             $job = BrokerTest::defaultJob();
             $env = $submitter->submit($job);
-            if (!$env) {
+            if ($env == null) {
                 break;
             }
-            $submitted += 1;
+            $submitted[] = $env;
         }
         return $submitted;
     }
