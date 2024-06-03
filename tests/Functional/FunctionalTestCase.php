@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace G41797\Queue\Pulsar\Functional;
 
+use G41797\Queue\Pulsar\Adapter;
+use G41797\Queue\Pulsar\Broker;
+use G41797\Queue\Pulsar\Configuration;
 use G41797\Queue\Pulsar\Receiver;
 use PHPUnit\Framework\TestCase;
+use RdKafka\Conf;
 
 
 abstract class FunctionalTestCase extends TestCase
@@ -24,6 +28,19 @@ abstract class FunctionalTestCase extends TestCase
     }
     public function clean(): void
     {
-        $this->assertGreaterThanOrEqual(0, (new Receiver(receiveQueueSize: 10000))->clean());
+        $url = self::defaultUrl();
+        $topic = self::defaultTopic();
+
+        $this->assertGreaterThanOrEqual(0, (new Receiver($url, $topic, receiveQueueSize: 10000))->clean());
+    }
+
+    static public function defaultUrl(): string
+    {
+        return Configuration::default()->url();
+    }
+
+    static public function defaultTopic(): string
+    {
+        return Broker::channelToTopic(Adapter::DEFAULT_CHANNEL_NAME);
     }
 }

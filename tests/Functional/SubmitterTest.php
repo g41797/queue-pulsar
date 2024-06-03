@@ -21,7 +21,11 @@ class SubmitterTest extends FunctionalTestCase
     {
         $count = 10;
         $this->assertEquals($count, count($this->submitJobs($count)));
-        $this->assertEquals($count, (new Receiver(receiveQueueSize: 1000))->clean());
+
+        $url = self::defaultUrl();
+        $topic = self::defaultTopic();
+
+        $this->assertEquals($count, (new Receiver($url, $topic, receiveQueueSize: 1))->clean());
     }
 
     private function submitJobs(int $count): array

@@ -2,7 +2,6 @@
 
 namespace G41797\Queue\Pulsar;
 
-use G41797\Queue\Pulsar\Cleaner;
 use G41797\Queue\Pulsar\Exception\NotConnectedPulsarException;
 use Pulsar\Consumer;
 use Pulsar\ConsumerOptions;
@@ -17,20 +16,20 @@ class Receiver
     private JsonMessageSerializer $serializer;
 
     public function __construct(
-        private readonly string $url                = 'pulsar://localhost:6650',
-        private readonly string $channelName        = Adapter::DEFAULT_CHANNEL_NAME,
+        private readonly string $url,
+        private readonly string $topic,
         private readonly int    $receiveQueueSize   = 1,
     ) {
         $this->serializer = new JsonMessageSerializer();
     }
 
-    public function receive(float $timeout = 2.0): ?IdEnvelope
+    public function receive(float $timeoutSec = 2.0): ?IdEnvelope
     {
         if (!$this->isConnected()) {
             throw new NotConnectedPulsarException();
         }
 
-        $finish = microtime(true) + ($timeout * 1000000);
+        $finish = microtime(true) + $timeoutSec;
 
         while (true)
         {
@@ -40,17 +39,18 @@ class Receiver
                 $this->consumer->ack($message);
 
                 $job        = $this->serializer->unserialize($message->getPayload());
-                $uuid       = $message->getProperties()['jobid'] ?? "";
-                $envelope   = new IdEnvelope($job, $uuid);
+                // $uuid       = $message->getProperties()['jobid'] ?? "";
+                $mid = $message->getMessageId();
+                $envelope   = new IdEnvelope($job, $mid);
 
                 return $envelope;
             }
             catch (MessageNotFound $e) {
                 if (microtime(true) <= $finish)
                 {
-                    break;
+                    continue;
                 }
-                continue;
+                break;
             }
             catch (\Exception $e)
             {
@@ -83,7 +83,7 @@ class Receiver
                 }
                 $cleaned += 1;
             }
-            catch (\Exception ) {
+            catch (\Exception  $exc) {
                 break;
             }
         }
@@ -110,7 +110,7 @@ class Receiver
             $options = new ConsumerOptions();
             $options->setConsumerName(Broker::CONSUMER_NAME);
             $options->setConnectTimeout(3);
-            $options->setTopic(Broker::channelToTopic($this->channelName));
+            $options->setTopic($this->topic);
             $options->setSubscription(Broker::SUBSCRIPTION_NAME);
             $options->setSubscriptionType(SubscriptionType::Shared);
             $options->setReconnectPolicy(true);

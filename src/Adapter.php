@@ -26,7 +26,7 @@ class Adapter implements AdapterInterface
         private array               $brokerConfiguration = [],
         private ?LoggerInterface    $logger = null,
         private ?LoopInterface      $loop = null,
-        private float               $timeout = 2.0,
+        private float               $timeoutSec = 2.0,
     ) {
         $this->brokerFactory = new BrokerFactory();
 
@@ -65,7 +65,7 @@ class Adapter implements AdapterInterface
     {
         $result = true;
         while ($this->loop->canContinue() && $result === true) {
-            $job = $this->broker->pull($this->timeout);
+            $job = $this->broker->pull($this->timeoutSec);
             if (null === $job) {
                 if ($continueOnEmptyQueue)
                 {
@@ -90,7 +90,7 @@ class Adapter implements AdapterInterface
             brokerConfiguration:    $this->brokerConfiguration,
             logger:                 $this->logger,
             loop:                   $this->loop,
-            timeout:                $this->timeout
+            timeoutSec:             $this->timeoutSec
         );
     }
 

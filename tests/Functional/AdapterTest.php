@@ -74,7 +74,7 @@ class AdapterTest extends FunctionalTestCase
         $factory = $this->getBrokerFactory();
         $logger = $this->getLogger();
         $loop = $this->getLoop();
-        return new Adapter(logger: $logger, loop: $loop, timeout: 3.0);
+        return new Adapter(logger: $logger, loop: $loop, timeoutSec: 3.0);
     }
 
     static function getJob(): MessageInterface {
@@ -124,6 +124,7 @@ class AdapterTest extends FunctionalTestCase
     protected function process(AdapterInterface $worker, MessageInterface $expectedJob, array $ids): void
     {
         $this->getLoop()->update(count($ids));
+        //$this->getLoop()->update(1000);
         $this->getHandler()->update($expectedJob);
 
         $worker->subscribe($this->getCallback());

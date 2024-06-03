@@ -66,7 +66,7 @@ class Submitter
         }
     }
 
-    private function disconnect(): void
+    public function disconnect(): void
     {
         if ($this->producer !== null) {
             $this->producer->close();
@@ -84,18 +84,20 @@ class Submitter
         $envelope = null;
 
         try {
-            $uuid = Uuid::uuid7()->toString();
+            // $uuid = Uuid::uuid7()->toString();
             $payload = $this->serializer->serialize($job);
 
-            $this->producer->send
+            $mid = $this->producer->send
             (
                 $payload,
+                /*
                 [
                     MessageOptions::PROPERTIES => ['jobid' => $uuid]
                 ]
+                */
             );
 
-            $envelope = new IdEnvelope($job, $uuid);
+            $envelope = new IdEnvelope($job, $mid);
         }
         catch (\Throwable ) {
             $envelope = null; // For breakpoint

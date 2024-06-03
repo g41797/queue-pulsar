@@ -20,51 +20,54 @@ class BaseTest extends FunctionalTestCase
         $this->produceConsume(1);
     }
 
-    private function produceConsume(int $receiveQueueSize)
+    private function produceConsume(int $receiveQueueSize): void
     {
         $produced = self::produce();
 
-        $this->assertGreaterThan(0, $produced);
+        $this->assertGreaterThan(0, count($produced));
 
-        $consumed = self::consume($produced, $receiveQueueSize);
+        $consumed = self::consume(count($produced), $receiveQueueSize);
 
-        $this->assertEquals($produced, $consumed);
+        $this->assertEquals(count($produced), count($consumed));
     }
 
-    static public function produce(): int
+    static public function produce(): array
     {
-        $count = 0;
+        $result = [];
 
         $options = new ProducerOptions();
 
         $options->setInitialSubscriptionName('workflows');
         $options->setConnectTimeout(3);
-        $options->setTopic('persistent://public/default/demo');
-        $producer = new Producer('pulsar://localhost:6650', $options);
+        $options->setTopic(self::defaultTopic());
+        $producer = new Producer(self::defaultUrl(), $options);
         $producer->connect();
 
-        for ($i = 0; $i < 10; $i++) {
-            $messageID = $producer->send(sprintf('hello %d', $i));
-            $count += 1;
+        for ($i = 0; $i < 100; $i++) {
+            $payload = sprintf('------------------- %d', $i);
+            $messageID = $producer->send($payload);
+            $result[] = $payload;
         }
 
         // close
         $producer->close();
 
-        return $count;
+        return $result;
     }
 
-    static public function consume(int $count, int $receiveQueueSize): int
+    static public function consume(int $count, int $receiveQueueSize): array
     {
+        $result = [];
+
         $options = new ConsumerOptions();
 
         $options->setConnectTimeout(3);
-        $options->setTopic('persistent://public/default/demo');
+        $options->setTopic(self::defaultTopic());
         $options->setSubscription('workflows');
         $options->setSubscriptionType(SubscriptionType::Shared);
         $options->setNackRedeliveryDelay(20);
         $options->setReceiveQueueSize($receiveQueueSize);
-        $consumer = new Consumer('pulsar://localhost:6650', $options);
+        $consumer = new Consumer(self::defaultUrl(), $options);
         $consumer->connect();
 
         $receive = $total = 0;
@@ -73,6 +76,7 @@ class BaseTest extends FunctionalTestCase
 
             try {
                 $message = $consumer->receive(false);
+                $result[] = $message->getPayload();
                 $receive += 1;
 
                 $consumer->ack($message);
@@ -94,6 +98,6 @@ class BaseTest extends FunctionalTestCase
 
         $consumer->close();
 
-        return $receive;
+        return $result;
     }
 }

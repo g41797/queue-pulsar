@@ -34,8 +34,6 @@ class Broker implements BrokerInterface
     private string $topic;
     private string $url;
 
-    private ?Receiver $receiver = null;
-
     public function __construct(
         string                          $channelName = Adapter::DEFAULT_CHANNEL_NAME,
         private ?BrokerConfiguration    $configuration = null,
@@ -68,9 +66,23 @@ class Broker implements BrokerInterface
         return new self($channel, $this->configuration, $this->logger);
     }
 
+    private ?Submitter $submitter = null;
+
     public function push(MessageInterface $job): ?IdEnvelope
     {
-        $env = (new Submitter($this->url, $this->topic))->submit($job);
+        if ($this->submitter == null)
+        {
+            $this->submitter = new Submitter($this->url, $this->topic);
+        }
+
+        $env = $this->submitter->submit($job);
+
+        if ($env == null)
+        {
+            $this->submitter->disconnect();
+            $this->submitter = null;
+        }
+
         return $env;
     }
 
@@ -79,13 +91,23 @@ class Broker implements BrokerInterface
         throw new NotSupportedStatusMethodException();
     }
 
+
+    private ?Receiver $receiver = null;
+
     public function pull(float $timeout): ?IdEnvelope
     {
+        if ($this->receiver == null)
+        {
+            $this->receiver = new Receiver($this->url, $this->topic);
+        }
+
         try {
-            $msg = (new Receiver($this->url, $this->topic))->receive($timeout);
+            $msg = $this->receiver->receive($timeout);
             return $msg;
         }
-        catch (\Exception) {
+        catch (\Exception $exc) {
+            $this->receiver->disconnect();
+            $this->receiver = null;
             return null;
         }
     }
