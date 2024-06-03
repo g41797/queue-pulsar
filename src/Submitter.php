@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace G41797\Queue\Pulsar;
 
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
-
 use Ramsey\Uuid\Uuid;
 
-use Yiisoft\Queue\Enum\JobStatus;
 use Yiisoft\Queue\Message\IdEnvelope;
 use Yiisoft\Queue\Message\JsonMessageSerializer;
 use Yiisoft\Queue\Message\MessageInterface;
 
 use Pulsar\Producer;
 use Pulsar\ProducerOptions;
-use Pulsar\Message;
 use Pulsar\MessageOptions;
 
 class Submitter
@@ -55,7 +50,7 @@ class Submitter
         try {
 
             $options = new ProducerOptions();
-            $options->setProducerName(Uuid::uuid7()->toString());
+            $options->setProducerName(Broker::PRODUCER_NAME);
             $options->setConnectTimeout(3);
             $options->setInitialSubscriptionName(Broker::SUBSCRIPTION_NAME);
             $options->setTopic($this->topic);

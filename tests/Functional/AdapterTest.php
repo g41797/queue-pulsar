@@ -128,7 +128,7 @@ class AdapterTest extends FunctionalTestCase
 
         $worker->subscribe($this->getCallback());
 
-        $this->assertEquals($this->getHandler()->processed(), count($ids));
+        $this->assertEquals(count($ids), $this->getHandler()->processed());
 
         return;
     }

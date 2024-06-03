@@ -6,7 +6,7 @@ namespace G41797\Queue\Pulsar\Functional;
 
 use G41797\Queue\Pulsar\Cleaner;
 
-class CleanerTest extends FunctionalTestCase
+class ReceiverTest extends FunctionalTestCase
 {
     public function testSetUp(): void
     {

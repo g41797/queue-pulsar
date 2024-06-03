@@ -24,7 +24,7 @@ class Receiver
         $this->serializer = new JsonMessageSerializer();
     }
 
-    public function receive(float $timeout = 1.0): ?IdEnvelope
+    public function receive(float $timeout = 2.0): ?IdEnvelope
     {
         if (!$this->isConnected()) {
             throw new NotConnectedPulsarException();
@@ -76,7 +76,7 @@ class Receiver
         while (true) {
 
             try {
-                $env = $this->receive();
+                $env = $this->receive(2.0);
                 if ($env == null)
                 {
                     break;
@@ -128,5 +128,12 @@ class Receiver
         }
     }
 
-
+    public function disconnect(): void
+    {
+        if ($this->consumer !== null)
+        {
+            $this->consumer->close();
+            $this->consumer = null;
+        }
+    }
 }

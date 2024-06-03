@@ -12,7 +12,6 @@
     "prefer-stable": true,
     "require": {
         "php": ">=8.2",
-        "basis-company/nats": "^0.22.0",
         "ikilobyte/pulsar-client-php": "^1.3.2",
         "ramsey/uuid": "^4.7",
         "yiisoft/factory": "^1.0",
