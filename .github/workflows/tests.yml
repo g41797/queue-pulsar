@@ -12,7 +12,8 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+
       - uses: php-actions/composer@v6
-        working-directory: docker
-      - run: bash ./start.sh
+      - run: bash docker/start.sh
+
       - run: vendor/bin/phpunit --testsuite Tests
