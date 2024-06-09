@@ -10,6 +10,8 @@ use G41797\Queue\Pulsar\Configuration;
 use G41797\Queue\Pulsar\Receiver;
 use PHPUnit\Framework\TestCase;
 use RdKafka\Conf;
+use Yiisoft\Queue\Message\Message;
+use Yiisoft\Queue\Message\MessageInterface;
 
 
 abstract class FunctionalTestCase extends TestCase
@@ -32,6 +34,10 @@ abstract class FunctionalTestCase extends TestCase
         $topic = self::defaultTopic();
 
         $this->assertGreaterThanOrEqual(0, (new Receiver($url, $topic, receiveQueueSize: 10000))->clean());
+    }
+    static public function defaultJob(): MessageInterface
+    {
+        return new Message('jobhandler', 'jobdata', metadata: []);
     }
 
     static public function defaultUrl(): string

@@ -6,6 +6,7 @@ use G41797\Queue\Pulsar\Exception\NotConnectedPulsarException;
 use Pulsar\Consumer;
 use Pulsar\ConsumerOptions;
 use Pulsar\Exception\MessageNotFound;
+use Pulsar\Message;
 use Pulsar\SubscriptionType;
 use Yiisoft\Queue\Message\IdEnvelope;
 use Yiisoft\Queue\Message\JsonMessageSerializer;
@@ -25,6 +26,20 @@ class Receiver
 
     public function receive(float $timeoutSec = 2.0): ?IdEnvelope
     {
+        $message = $this->receiveRaw($timeoutSec);
+
+        if (null === $message) {
+            return null;
+        }
+
+        $job = $this->serializer->unserialize($message->getPayload());
+        $mid = $message->getMessageId();
+        $envelope = new IdEnvelope($job, $mid);
+        return $envelope;
+    }
+
+    public function receiveRaw(float $timeoutSec = 2.0): ?Message
+    {
         if (!$this->isConnected()) {
             throw new NotConnectedPulsarException();
         }
@@ -37,13 +52,7 @@ class Receiver
             {
                 $message = $this->consumer->receive(false);
                 $this->consumer->ack($message);
-
-                $job        = $this->serializer->unserialize($message->getPayload());
-                // $uuid       = $message->getProperties()['jobid'] ?? "";
-                $mid = $message->getMessageId();
-                $envelope   = new IdEnvelope($job, $mid);
-
-                return $envelope;
+                return $message;
             }
             catch (MessageNotFound $e) {
                 if (microtime(true) <= $finish)
@@ -56,7 +65,6 @@ class Receiver
             {
                 throw $e;
             }
-
         }
 
         return null;
@@ -76,8 +84,8 @@ class Receiver
         while (true) {
 
             try {
-                $env = $this->receive(2.0);
-                if ($env == null)
+                $msg = $this->receiveRaw(2.0);
+                if ($msg == null)
                 {
                     break;
                 }

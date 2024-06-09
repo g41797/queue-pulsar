@@ -29,6 +29,8 @@ class BaseTest extends FunctionalTestCase
         $consumed = self::consume(count($produced), $receiveQueueSize);
 
         $this->assertEquals(count($produced), count($consumed));
+
+        $this->assertEquals(0, count(array_diff($produced, $consumed)));
     }
 
     static public function produce(): array
@@ -44,8 +46,13 @@ class BaseTest extends FunctionalTestCase
         $producer->connect();
 
         for ($i = 0; $i < 100; $i++) {
-            $payload = sprintf('------------------- %d', $i);
+
+            $job = self::defaultJob();
+            $job->getMetadata()[$i] = $i;
+            $payload = json_encode($job, JSON_THROW_ON_ERROR);
+
             $messageID = $producer->send($payload);
+
             $result[] = $payload;
         }
 

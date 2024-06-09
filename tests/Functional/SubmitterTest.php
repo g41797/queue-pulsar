@@ -34,7 +34,7 @@ class SubmitterTest extends FunctionalTestCase
 
         for ($i = 0; $i < $count; $i++) {
             $submitter = Submitter::default();
-            $job = BrokerTest::defaultJob();
+            $job = self::defaultJob();
             $env = $submitter->submit($job);
             if ($env == null) {
                 break;
