@@ -12,7 +12,8 @@ jobs:
       - run: bash docker/start.sh
 
       - uses: shivammathur/setup-php@v2
-        with: { php-version: ${{ matrix.php }} }
+        with:
+         php-version: ${{ matrix.php }}
 
       - uses: php-actions/composer@v6
         with:
