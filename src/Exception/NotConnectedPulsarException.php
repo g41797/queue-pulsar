@@ -10,12 +10,12 @@ class NotConnectedPulsarException extends \RuntimeException implements FriendlyE
 {
     public function getName(): string
     {
-        return 'Not connected to Nats.';
+        return 'Not connected to Pulsar.';
     }
 
     public function getSolution(): ?string
     {
-        return 'Check your Nats configuration and run nats->connect() before using it.';
+        return 'Check your Pulsar configuration.';
     }
 }
 

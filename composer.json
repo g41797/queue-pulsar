@@ -1,5 +1,5 @@
 {
-    "name": "g41797/queue-nats",
+    "name": "g41797/queue-pulsar",
     "type": "library",
     "description": "Yii Queue Adapter for Apache Pulsar",
     "keywords": [
