@@ -16,4 +16,4 @@ jobs:
       - uses: php-actions/composer@v6
       - run: bash docker/start.sh
 
-      - run: vendor/bin/phpunit --testsuite Functional
+      - run: vendor/bin/phpunit --testsuite Tests

@@ -17,8 +17,8 @@
     </php>
 
     <testsuites>
-        <testsuite name="Functional">
-            <directory>tests/Functional</directory>
+        <testsuite name="Tests">
+            <directory>./tests/Functional</directory>
         </testsuite>
     </testsuites>
 
