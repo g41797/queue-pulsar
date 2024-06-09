@@ -3,9 +3,6 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      NATS_CLIENT_LOG: 1
-      NATS_TEST_LOG: 1
     strategy:
       matrix:
         php: ["8.2", "8.3"]
@@ -15,11 +12,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          NATS_CLIENT_VERBOSE: ${{ matrix.verbose }}
       - uses: php-actions/composer@v6
-      - run: docker compose up -d
         working-directory: docker
-      - run: |
-            echo "-- Wait for Pulsar service to be ready"
-            until curl http://localhost:8080/metrics > /dev/null 2>&1 ; do sleep 1; done
+      - run: bash ./start.sh
       - run: vendor/bin/phpunit --testsuite Tests
